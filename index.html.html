@@ -1,435 +1,275 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>API & Proxy Store</title>
-  <style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>End Point Hub</title>
+<style>
     body {
-      font-family: Arial, sans-serif;
-      background: #ffffff; /* white by default */
-      color: #000;
-      text-align: center;
-      padding: 20px;
-      transition: all 0.3s ease;
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        transition: 0.3s;
     }
-    button {
-      padding: 12px 20px;
-      margin: 10px;
-      font-size: 16px;
-      cursor: pointer;
-      background: #1e90ff;
-      border: none;
-      border-radius: 6px;
-      color: white;
+
+    :root {
+        --bg: #ffffff;
+        --text: #000000;
+        --card: #f2f2f2;
+        --button: #1e90ff;
     }
-    .hidden {
-      display: none;
+
+    .dark {
+        --bg: #0d1117;
+        --text: #ffffff;
+        --card: #1a1f25;
+        --button: #4fa3ff;
     }
-    .box {
-      background: rgba(21, 26, 45, 0.85);
-      color: #fff;
-      padding: 15px;
-      margin: 10px auto;
-      max-width: 500px;
-      border-radius: 10px;
-      transition: all 0.3s ease;
+
+    #themeToggle {
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        padding: 8px 14px;
+        background: var(--button);
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        z-index: 999;
     }
+
+    #loginScreen {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        text-align: center;
+    }
+
+    #loginBox {
+        background: var(--card);
+        padding: 20px;
+        border-radius: 10px;
+        width: 90%;
+        max-width: 350px;
+    }
+
+    #loginBox input {
+        width: 100%;
+        padding: 10px;
+        margin-top: 10px;
+        border-radius: 6px;
+        border: 1px solid #999;
+    }
+
+    #loginBox button {
+        width: 100%;
+        padding: 12px;
+        margin-top: 10px;
+        background: var(--button);
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+    #mainContent {
+        display: none;
+        padding: 20px;
+        max-width: 900px;
+        margin: auto;
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .category {
+        background: var(--card);
+        padding: 20px;
+        border-radius: 12px;
+        margin-top: 20px;
+    }
+
+    .itemBox {
+        border-bottom: 1px solid #ccc;
+        padding: 12px 0;
+    }
+
+    .itemBox button {
+        background: var(--button);
+        color: white;
+        padding: 8px 14px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        float: right;
+    }
+
     .payment-box {
-      background: rgba(30, 144, 255, 0.15);
-      border: 2px solid #1e90ff;
-      padding: 15px;
-      margin: 10px auto;
-      max-width: 500px;
-      border-radius: 10px;
-      color: #fff;
-      transition: all 0.3s ease;
+        margin-top: 10px;
+        padding: 12px;
+        background: #e9f2ff;
+        border-left: 3px solid #1e90ff;
+        border-radius: 6px;
     }
-    #darkModeToggle {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      padding: 10px 15px;
-      background: #333;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      z-index: 1000;
-    }
+
     footer {
-      margin-top: 50px;
-      font-size: 14px;
-      color: #888;
+        text-align: center;
+        margin-top: 40px;
+        padding: 20px;
+        color: gray;
     }
-  </style>
+</style>
 </head>
 <body>
 
-  <button id="darkModeToggle" onclick="toggleDarkMode()">🌙 Dark Mode</button>
+<button id="themeToggle">Dark Mode</button>
 
-  <!-- Developer ID Screen -->
-  <div id="pinScreen">
-    <h2>Enter Developer ID to access the website</h2>
-    <input type="text" id="pinInput" placeholder="Enter Developer ID" />
-    <button onclick="checkPin()">Enter</button>
-  </div>
+<div id="loginScreen">
+    <div id="loginBox">
+        <h2>Enter Developer ID</h2>
+        <input type="text" id="devInput" placeholder="example: tyler@devmail.com">
+        <button onclick="verifyDev()">Enter</button>
+    </div>
+</div>
 
-  <!-- Website Content -->
-  <div id="mainContent" class="hidden">
+<div id="mainContent">
+    <h1>Central Place for API Endpoints — Fast & Secure</h1>
 
-    <h1>⚡ Central Hub for Fast API Endpoints ⚡</h1>
-
-    <!-- Main Buttons -->
-    <button onclick="showSection('api')">API</button>
-    <button onclick="showSection('proxy')">Proxy</button>
-    <button onclick="showSection('server')">Server</button>
-
-    <div id="api" class="hidden">
-      <h2>📦 API Packages</h2>
-      <div id="apiList"></div>
+    <div class="category">
+        <h2>API Services</h2>
+        <div id="apiList"></div>
     </div>
 
-    <div id="proxy" class="hidden">
-      <h2>🔌 Proxy Packages</h2>
-      <div id="proxyList"></div>
+    <div class="category">
+        <h2>Proxy Services</h2>
+        <div id="proxyList"></div>
     </div>
 
-    <div id="server" class="hidden">
-      <h2>🖥️ Server Packages</h2>
-      <div id="serverList"></div>
+    <div class="category">
+        <h2>Server Plans</h2>
+        <div id="serverList"></div>
     </div>
 
     <footer>
-      © 2025 End Point Hub. All rights reserved. Unauthorized copying or distribution is prohibited.
+        © 2025 End Point Hub. All rights reserved. Unauthorized copying or distribution is prohibited.
     </footer>
-  </div>
+</div>
 
-  <script>
-    let darkMode = false;
-    const usdtAddress = "0xf0d2E7ccbb36c6C03434841F7405f6B1f48404a5";
+<script>
+const usdtAddress = "0xf0d2E7ccbb36c6C03434841F7405f6B1f48404a5";
+const revolutEmail = "onomijones@gmail.com";
+const developerID = "tyler@devmail.com";
 
-    const apis = [
-      "Payment API", "SMS API", "Email API", "Calling API", "Captcha API",
-      "casino API", "Betfair API", "AI bot API", "Chat API", "Voice API",
-      "Video API", "Gaming API", "E-commerce API", "Logistics API", "Auth API",
-      "Open Ai API", "Forex API", "Crypto GateWay API", "Unlimited Website API", "Translation API",
-      "OCR API", "Face Recognition API", "Fraud Detection API", "Sports API",
-      "Music API", "News API", "Ticket Bot API", "File Storage API", "Autentication API",
-      "Verification API", "Admin Panel API", "Bypass API", "Rap API",
-    ];
+const apis = [
+    { name: "Identity Lookup API", price: "$10" },
+    { name: "Phone Number Validation API", price: "$12" },
+    { name: "KYC Verification API", price: "$15" },
+    { name: "Email Checker API", price: "$9" },
+    { name: "Fraud Score API", price: "$20" },
+    { name: "IP Intelligence API", price: "$18" },
+    { name: "User Agent Detection", price: "$7" },
+    { name: "BIN Checker API", price: "$8" },
+    { name: "Geo Location API", price: "$10" },
+    { name: "SMS Sender API", price: "$25" },
+    { name: "WhatsApp API", price: "$30" },
+    { name: "Face Match API", price: "$40" },
+    { name: "OCR Reader API", price: "$16" },
+    { name: "Credit Score API", price: "$22" },
+    { name: "Device Fingerprint API", price: "$19" },
+    { name: "Address Validator", price: "$13" },
+    { name: "Fraud Prevention API", price: "$26" },
+    { name: "Data Enrichment API", price: "$14" },
+    { name: "Blacklist Checker API", price: "$12" },
+    { name: "IP Proxy Checker API", price: "$11" },
+    { name: "Crypto Wallet Validator", price: "$20" },
+    { name: "Crypto Price API", price: "$9" },
+    { name: "Server Uptime API", price: "$18" },
+    { name: "Payment Verification API", price: "$30" },
+    { name: "Webhook API", price: "$6" },
+    { name: "AI Text Classifier API", price: "$15" },
+    { name: "Voice Recognition API", price: "$25" },
+    { name: "Image Detection API", price: "$20" },
+    { name: "Database Lookup API", price: "$17" },
+    { name: "Fraud Risk Engine", price: "$45" }
+];
 
-    const proxies = [
-      "Residential Proxy",
-      "Datacenter Proxy",
-      "Mobile Proxy (4G/5G)",
-      "Rotating Proxy"
-    ];
+const proxies = [
+    { name: "Residential Proxy", price: "$30" },
+    { name: "Datacenter Proxy", price: "$20" },
+    { name: "Rotating Proxy", price: "$40" },
+    { name: "Mobile Proxy", price: "$50" }
+];
 
-    const servers = [
-      "VPS Server",
-      "Dedicated Server",
-      "Cloud Server",
-      "GPU Server"
-    ];
+const servers = [
+    { name: "Basic VPS", price: "$25" },
+    { name: "Advanced VPS", price: "$40" },
+    { name: "Dedicated Server", price: "$70" },
+    { name: "Enterprise Server", price: "$120" }
+];
 
-    // Prices for Basic / Standard / Premium (in Euro)
-    const plans = {
-      api: { basic: "€400", standard: "€700", premium: "€1400" },
-      proxy: { basic: "€1200", standard: "€1700", premium: "€2500" },
-      server: { basic: "€600", standard: "€1200", premium: "€2400" }
-    };
-
-    function checkPin() {
-      const pin = document.getElementById('pinInput').value.trim();
-      if(pin === "tyler@devmail.com") {
-        document.getElementById('pinScreen').classList.add('hidden');
-        document.getElementById('mainContent').classList.remove('hidden');
-        renderList(apis, "apiList", "api");
-        renderList(proxies, "proxyList", "proxy");
-        renderList(servers, "serverList", "server");
-      } else {
-        alert("Incorrect Developer ID");
-      }
+function verifyDev() {
+    const input = document.getElementById("devInput").value.trim();
+    if (input === developerID) {
+        document.getElementById("loginScreen").style.display = "none";
+        document.getElementById("mainContent").style.display = "block";
+    } else {
+        alert("Invalid Developer ID");
     }
+}
 
-    function showSection(type) {
-      document.getElementById("api").classList.add("hidden");
-      document.getElementById("proxy").classList.add("hidden");
-      document.getElementById("server").classList.add("hidden");
-      document.getElementById(type).classList.remove("hidden");
-    }
+document.getElementById("themeToggle").onclick = () => {
+    document.body.classList.toggle("dark");
+};
 
-    function renderList(list, elementId, type) {
-      const container = document.getElementById(elementId);
-      container.innerHTML = "";
-      list.forEach(item => {
+function renderItems(list, container) {
+    list.forEach(item => {
         const div = document.createElement("div");
-        div.className = "box";
+        div.className = "itemBox";
         div.innerHTML = `
-          <h3>${item}</h3>
-          <p>Basic: ${plans[type].basic} | Standard: ${plans[type].standard} | Premium: ${plans[type].premium}</p>
-          <button onclick="showPayment('${item}', this)">Buy Now</button>
+            ${item.name} — <b>${item.price}</b>
+            <button onclick="showPayment('${item.name}', this)">Buy</button>
         `;
         container.appendChild(div);
-      });
-    }
+    });
+}
 
-    function showPayment(item, button) {
-      button.disabled = true;
-      const paymentDiv = document.createElement("div");
-      paymentDiv.className = "payment-box";
-      paymentDiv.innerHTML = `
-        <p>Send USDT (BEP20) to this address:</p>
+renderItems(apis, document.getElementById("apiList"));
+renderItems(proxies, document.getElementById("proxyList"));
+renderItems(servers, document.getElementById("serverList"));
+
+function showPayment(item, button) {
+    button.disabled = true;
+    const paymentDiv = document.createElement("div");
+    paymentDiv.className = "payment-box";
+    paymentDiv.innerHTML = `
+        <p><b>Pay using USDT (BEP20):</b></p>
         <p style="word-break: break-all;">${usdtAddress}</p>
-        <button onclick="confirmPayment('${item}', this)">I Have Paid</button>
-      `;
-      button.parentElement.appendChild(paymentDiv);
-    }
 
-    function confirmPayment(item, button) {
-      button.disabled = true;
-      window.location.href = "https://wa.me/966543497050";
-    }
+        <hr>
 
-    function toggleDarkMode() {
-      darkMode = !darkMode;
-      if(darkMode) {
-        document.body.style.background = "url('https://i.ibb.co/wFWDyPDn/data-center-specialist-works-server-footage-162932572-iconl.webp')";
-        document.body.style.color = "white";
-        document.querySelectorAll('.box, .payment-box').forEach(el => {
-          el.style.background = "rgba(21,26,45,0.85)";
-          el.style.color = "#fff";
-        });
-      } else {
-        document.body.style.background = "#ffffff";
-        document.body.style.color = "#000";
-        document.querySelectorAll('.box, .payment-box').forEach(el => {
-          el.style.background = "rgba(21,26,45,0.85)";
-          el.style.color = "#fff";
-        });
-      }
-    }
+        <p><b>Or pay using Revolut:</b></p>
+        <p>${revolutEmail}</p>
 
-  </script>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>API & Proxy Store</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #ffffff; /* white by default */
-      color: #000;
-      text-align: center;
-      padding: 20px;
-      transition: all 0.3s ease;
-    }
-    button {
-      padding: 12px 20px;
-      margin: 10px;
-      font-size: 16px;
-      cursor: pointer;
-      background: #1e90ff;
-      border: none;
-      border-radius: 6px;
-      color: white;
-    }
-    .hidden {
-      display: none;
-    }
-    .box {
-      background: rgba(21, 26, 45, 0.85);
-      color: #fff;
-      padding: 15px;
-      margin: 10px auto;
-      max-width: 500px;
-      border-radius: 10px;
-      transition: all 0.3s ease;
-    }
-    .payment-box {
-      background: rgba(30, 144, 255, 0.15);
-      border: 2px solid #1e90ff;
-      padding: 15px;
-      margin: 10px auto;
-      max-width: 500px;
-      border-radius: 10px;
-      color: #fff;
-      transition: all 0.3s ease;
-    }
-    #darkModeToggle {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      padding: 10px 15px;
-      background: #333;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      z-index: 1000;
-    }
-    footer {
-      margin-top: 50px;
-      font-size: 14px;
-      color: #888;
-    }
-  </style>
-</head>
-<body>
+        <button onclick="confirmPayment('${item}')">I Have Paid</button>
+    `;
+    button.parentElement.appendChild(paymentDiv);
+}
 
-  <button id="darkModeToggle" onclick="toggleDarkMode()">🌙 Dark Mode</button>
-
-  <!-- Developer ID Screen -->
-  <div id="pinScreen">
-    <h2>Enter Developer ID to access the website</h2>
-    <input type="text" id="pinInput" placeholder="Enter Developer ID" />
-    <button onclick="checkPin()">Enter</button>
-  </div>
-
-  <!-- Website Content -->
-  <div id="mainContent" class="hidden">
-
-    <h1>⚡ Central Hub for Fast API Endpoints ⚡</h1>
-
-    <!-- Main Buttons -->
-    <button onclick="showSection('api')">API</button>
-    <button onclick="showSection('proxy')">Proxy</button>
-    <button onclick="showSection('server')">Server</button>
-
-    <div id="api" class="hidden">
-      <h2>📦 API Packages</h2>
-      <div id="apiList"></div>
-    </div>
-
-    <div id="proxy" class="hidden">
-      <h2>🔌 Proxy Packages</h2>
-      <div id="proxyList"></div>
-    </div>
-
-    <div id="server" class="hidden">
-      <h2>🖥️ Server Packages</h2>
-      <div id="serverList"></div>
-    </div>
-
-    <footer>
-      © 2025 End Point Hub. All rights reserved. Unauthorized copying or distribution is prohibited.
-    </footer>
-  </div>
-
-  <script>
-    let darkMode = false;
-    const usdtAddress = "0xf0d2E7ccbb36c6C03434841F7405f6B1f48404a5";
-
-    const apis = [
-      "Payment API", "SMS API", "Email API", "Calling API", "Captcha API",
-      "casino API", "Betfair API", "AI bot API", "Chat API", "Voice API",
-      "Video API", "Gaming API", "E-commerce API", "Logistics API", "Auth API",
-      "Open Ai API", "Forex API", "Crypto GateWay API", "Unlimited Website API", "Translation API",
-      "OCR API", "Face Recognition API", "Fraud Detection API", "Sports API",
-      "Music API", "News API", "Ticket Bot API", "File Storage API", "Autentication API",
-      "Verification API", "Admin Panel API", "Bypass API", "Rap API",
-    ];
-
-    const proxies = [
-      "Residential Proxy",
-      "Datacenter Proxy",
-      "Mobile Proxy (4G/5G)",
-      "Rotating Proxy"
-    ];
-
-    const servers = [
-      "VPS Server",
-      "Dedicated Server",
-      "Cloud Server",
-      "GPU Server"
-    ];
-
-    // Prices for Basic / Standard / Premium (in Euro)
-    const plans = {
-      api: { basic: "€400", standard: "€700", premium: "€1400" },
-      proxy: { basic: "€1200", standard: "€1700", premium: "€2500" },
-      server: { basic: "€600", standard: "€1200", premium: "€2400" }
-    };
-
-    function checkPin() {
-      const pin = document.getElementById('pinInput').value.trim();
-      if(pin === "tyler@devmail.com") {
-        document.getElementById('pinScreen').classList.add('hidden');
-        document.getElementById('mainContent').classList.remove('hidden');
-        renderList(apis, "apiList", "api");
-        renderList(proxies, "proxyList", "proxy");
-        renderList(servers, "serverList", "server");
-      } else {
-        alert("Incorrect Developer ID");
-      }
-    }
-
-    function showSection(type) {
-      document.getElementById("api").classList.add("hidden");
-      document.getElementById("proxy").classList.add("hidden");
-      document.getElementById("server").classList.add("hidden");
-      document.getElementById(type).classList.remove("hidden");
-    }
-
-    function renderList(list, elementId, type) {
-      const container = document.getElementById(elementId);
-      container.innerHTML = "";
-      list.forEach(item => {
-        const div = document.createElement("div");
-        div.className = "box";
-        div.innerHTML = `
-          <h3>${item}</h3>
-          <p>Basic: ${plans[type].basic} | Standard: ${plans[type].standard} | Premium: ${plans[type].premium}</p>
-          <button onclick="showPayment('${item}', this)">Buy Now</button>
-        `;
-        container.appendChild(div);
-      });
-    }
-
-    function showPayment(item, button) {
-      button.disabled = true;
-      const paymentDiv = document.createElement("div");
-      paymentDiv.className = "payment-box";
-      paymentDiv.innerHTML = `
-        <p>Send USDT (BEP20) to this address:</p>
-        <p style="word-break: break-all;">${usdtAddress}</p>
-        <button onclick="confirmPayment('${item}', this)">I Have Paid</button>
-      `;
-      button.parentElement.appendChild(paymentDiv);
-    }
-
-    function confirmPayment(item, button) {
-      button.disabled = true;
-      window.location.href = "https://wa.me/966543497050";
-    }
-
-    function toggleDarkMode() {
-      darkMode = !darkMode;
-      if(darkMode) {
-        document.body.style.background = "url('https://i.ibb.co/wFWDyPDn/data-center-specialist-works-server-footage-162932572-iconl.webp')";
-        document.body.style.color = "white";
-        document.querySelectorAll('.box, .payment-box').forEach(el => {
-          el.style.background = "rgba(21,26,45,0.85)";
-          el.style.color = "#fff";
-        });
-      } else {
-        document.body.style.background = "#ffffff";
-        document.body.style.color = "#000";
-        document.querySelectorAll('.box, .payment-box').forEach(el => {
-          el.style.background = "rgba(21,26,45,0.85)";
-          el.style.color = "#fff";
-        });
-      }
-    }
-
-  </script>
+function confirmPayment(item) {
+    alert("Payment for " + item + " received.\nContact Admin: +966543497050");
+}
+</script>
 
 </body>
 </html>
 
-</body>
-</html>
 
 
 
