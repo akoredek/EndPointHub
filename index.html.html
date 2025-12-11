@@ -107,8 +107,6 @@
   <script>
     let darkMode = false;
     const usdtAddress = "0xf0d2E7ccbb36c6C03434841F7405f6B1f48404a5";
-    "REVOLUTE";
-    "onomijones@gmail.com";
 
     const apis = [
       "Payment API", "SMS API", "Email API", "Calling API", "Captcha API",
@@ -177,17 +175,21 @@
     }
 
     function showPayment(item, button) {
-      button.disabled = true;
-      const paymentDiv = document.createElement("div");
-      paymentDiv.className = "payment-box";
-      paymentDiv.innerHTML = `
-        <p>Send USDT (BEP20) to this address:</p>
-        <p style="word-break: break-all;">${usdtAddress}</p>
-        <button onclick="confirmPayment('${item}', this)">I Have Paid</button>
-      `;
-      button.parentElement.appendChild(paymentDiv);
-    }
+  button.disabled = true;
+  const paymentDiv = document.createElement("div");
+  paymentDiv.className = "payment-box";
+  paymentDiv.innerHTML = `
+    <p>Send USDT (BEP20) to this address:</p>
+    <p style="word-break: break-all;">${usdtAddress}</p>
 
+    <br>
+    <p>Or pay with Revolut:</p>
+    <p>onomijones@gmail.com</p>
+
+    <button onclick="confirmPayment('${item}', this)">I Have Paid</button>
+  `;
+  button.parentElement.appendChild(paymentDiv);
+}
     function confirmPayment(item, button) {
       button.disabled = true;
       window.location.href = "https://wa.me/966543497050";
